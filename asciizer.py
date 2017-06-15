@@ -42,10 +42,8 @@ class asciizer:
         print(self.__intensity_calculator())
 
     def save(self, filename):
-        f = open(filename, "w")
-        f.write(self.__intensity_calculator())
-        f.close()
-        print(self.__intensity_calculator())
+        with open(filename, "w") as f:
+            f.write(self.__intensity_calculator())
 
     def close(self):
         self.orig_image.close()
