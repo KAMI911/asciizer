@@ -99,7 +99,7 @@ if __name__ == "__main__":
         try:
             ascii = asciizer(cmd.input, cmd.width, DEFAULT_INTENSITY_SCALE, cmd.reverse)
         except:
-            print('Unable load image!')
+            print('Unable load ({0}) image!'.format(cmd.input))
             exit(1)
         ascii.draw()
     else:
