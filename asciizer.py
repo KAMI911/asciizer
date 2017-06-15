@@ -19,8 +19,10 @@ class asciizer:
         self.orig_img = self.orig_image.load()
         self.image_size = self.orig_image.size
         self.__calculate_pixel_ration()
-        self.intensity_bar = intensity
-        self.reverse = reverse
+        if not self.reverse:
+            self.intensity_bar = intensity
+        else:
+            self.intensity_bar = intensity[::-1]
         self.intensity_step = DEFAULT_MAX_INTENSITY / (len(intensity) - 1)
 
     def __calculate_pixel_ration(self):
@@ -31,10 +33,7 @@ class asciizer:
         for y in range(0, self.orig_image.height - 1, self.image_ratio):
             for x in range(0, self.orig_image.width - 1, self.image_ratio):
                 pixel = (self.orig_img[x, y])
-                if not self.reverse:
-                    image_str += (self.intensity_bar[int(sum(pixel) / self.intensity_step)])
-                else:
-                    image_str +=  (self.intensity_bar[len(self.intensity_bar) - 1 - (int(sum(pixel) / self.intensity_step))])
+                image_str += (self.intensity_bar[int(sum(pixel) / self.intensity_step)])
             image_str += "\n"
         return image_str
 
@@ -99,6 +98,7 @@ if __name__ == "__main__":
             ascii = asciizer(cmd.input, cmd.width, DEFAULT_INTENSITY_SCALE, cmd.reverse)
         except:
             print('Unable load image!')
+            exit(1)
         ascii.draw()
     else:
         print('File is not exist! ({0})'.format(cmd.input))
