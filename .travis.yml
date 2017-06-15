@@ -16,4 +16,3 @@ install:
 # command to run test
 script:
   - python asciizer.py -h
-
