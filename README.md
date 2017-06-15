@@ -1,8 +1,8 @@
-* ASCIIzer - Make beautiful ASCII arts from images 
+# ASCIIzer - Make beautiful ASCII arts from images 
 
-This program creates ASCII art from your image. You can show the ASCII art or save it  directly to file. Also you can specify the character width of the picture.
+This program creates ASCII art from your image. You can show the ASCII art or save it directly to file. Also you can specify the character width of the picture.
 
-** Usage of ASCIIzer
+## Usage of ASCIIzer
 
 usage: asciizer [-h] -i INPUT [-o OUTPUT] [-w WIDTH] [-r]
 
