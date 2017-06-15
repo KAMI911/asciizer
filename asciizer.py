@@ -19,6 +19,8 @@ class asciizer:
         self.orig_img = self.orig_image.load()
         self.image_size = self.orig_image.size
         self.__calculate_pixel_ration()
+        self.reverse = reverse
+
         if not self.reverse:
             self.intensity_bar = intensity
         else:
