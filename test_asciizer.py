@@ -36,6 +36,7 @@ class TestCalculations(unittest.TestCase):
         self.t = asciizer.asciizer(filename=input_file_path('Tux.png'), max_width=10)
         self.assertEqual(self.t.image_ratio, 26)
 
+class TestIntensityBar(unittest.TestCase):
     def test_image_load_intensity_bar(self):
         self.t = asciizer.asciizer(filename=input_file_path('Tux.png'))
         self.assertEqual(self.t.intensity_bar, ' .:-=+*#%@')
@@ -56,6 +57,7 @@ class TestCalculations(unittest.TestCase):
         self.t = asciizer.asciizer(filename=input_file_path('Tux.png'), intensity='TESZ')
         self.assertEqual(self.t.intensity_bar, 'TESZ')
 
+class TestSaveImage(unittest.TestCase):
     def test_image_save_jpg(self):
         self.temp_file = temp_file_path('Tux100.txt')
         self.compare_file = compare_file_path('Tux100.txt')
@@ -95,7 +97,9 @@ class TestCalculations(unittest.TestCase):
 
 def testing_asciizer():
     calculate = unittest.TestLoader().loadTestsFromTestCase(TestCalculations)
-    suite = unittest.TestSuite([calculate])
+    intensity_bar = unittest.TestLoader().loadTestsFromTestCase(TestIntensityBar)
+    save_image = unittest.TestLoader().loadTestsFromTestCase(TestSaveImage)
+    suite = unittest.TestSuite([calculate, intensity_bar, save_image])
     return unittest.TextTestRunner(verbosity=2).run(suite)
 
 
