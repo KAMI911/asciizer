@@ -13,7 +13,6 @@ install:
   - "pip install --upgrade pip"
   - "pip install --pre -r requirements.txt"
   - mkdir -p test/input test/tmp
-  - wget -P test/input https://upload.wikimedia.org/wikipedia/commons/a/af/Tux.png
 
 # command to run test
 script:
