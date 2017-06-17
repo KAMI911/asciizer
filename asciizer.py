@@ -10,41 +10,53 @@ except ImportError as err:
 DEFAULT_IMAGE_MAX_SIZE = 100
 DEFAULT_INTENSITY_SCALE = " .:-=+*#%@"
 DEFAULT_MAX_INTENSITY = 3 * 255
+DEFAULT_MAX_ONE_CHANNEL_INTENSITY = 255
 
 
 class asciizer:
-    def __init__(self, filename, max_with=DEFAULT_IMAGE_MAX_SIZE, intensity=DEFAULT_INTENSITY_SCALE, reverse=False):
-        self.max_with = max_with
-        self.orig_image = Image.open(filename)
+    def __init__(self, **kwargs):
+        self.max_width = DEFAULT_IMAGE_MAX_SIZE
+        self.reverse = False
+        self.intensity_bar = DEFAULT_INTENSITY_SCALE
+        for key, value in kwargs.items():
+            if key == 'max_width': self.max_width = value
+            if key == 'filename': self.orig_image = Image.open(value)
+            if key == 'reverse': self.reverse = value
+            if key == 'intensity': self.intensity_bar = value
+        if not self.reverse:
+            self.intensity_bar = self.intensity_bar[::-1]
+        else:
+            self.intensity_bar = self.intensity_bar
         self.orig_img = self.orig_image.load()
         self.image_size = self.orig_image.size
         self.__calculate_pixel_ration()
-        self.reverse = reverse
-
-        if not self.reverse:
-            self.intensity_bar = intensity
-        else:
-            self.intensity_bar = intensity[::-1]
-        self.intensity_step = DEFAULT_MAX_INTENSITY / (len(intensity) - 1)
+        self.intensity_step = int(DEFAULT_MAX_INTENSITY / (len(self.intensity_bar) - 1))
+        self.intensity_step_int = int(DEFAULT_MAX_ONE_CHANNEL_INTENSITY / (len(self.intensity_bar) - 1))
 
     def __calculate_pixel_ration(self):
-        self.image_ratio = int(self.orig_image.width / self.max_with)
+        self.image_ratio = int(self.orig_image.width / self.max_width)
 
-    def __intensity_calculator(self):
+    def __intensity_calculator(self, one_pixel, intensity_diff):
+        return (self.intensity_bar[int(sum(one_pixel) / intensity_diff)])
+
+    def process(self):
         image_str = ""
         for y in range(0, self.orig_image.height - 1, self.image_ratio):
             for x in range(0, self.orig_image.width - 1, self.image_ratio):
-                pixel = (self.orig_img[x, y])
-                image_str += (self.intensity_bar[int(sum(pixel) / self.intensity_step)])
+                pixel = self.orig_img[x, y]
+                if not isinstance(pixel, int):
+                    image_str += self.__intensity_calculator(pixel, self.intensity_step)
+                else:
+                    image_str += self.intensity_bar[int((255 - pixel) / self.intensity_step_int)]
             image_str += "\n"
         return image_str
 
     def draw(self):
-        print(self.__intensity_calculator())
+        print(self.process())
 
     def save(self, filename):
         with open(filename, "w") as f:
-            f.write(self.__intensity_calculator())
+            f.write(self.process())
 
     def close(self):
         self.orig_image.close()
@@ -97,14 +109,15 @@ if __name__ == "__main__":
     cmd.parse()
     if os.path.isfile(cmd.input):
         try:
-            ascii = asciizer(cmd.input, cmd.width, DEFAULT_INTENSITY_SCALE, cmd.reverse)
+            ascii = asciizer(filename=cmd.input, max_width=cmd.width, intensity=DEFAULT_INTENSITY_SCALE,
+                             reverse=cmd.reverse)
         except:
             print('Unable load ({0}) image!'.format(cmd.input))
             exit(1)
         ascii.draw()
     else:
         print('File is not exist! ({0})'.format(cmd.input))
-        exit (1)
+        exit(1)
     if cmd.output is not None:
         try:
             ascii.save(cmd.output)
