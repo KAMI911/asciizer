@@ -23,7 +23,7 @@ class asciizer:
             if key == 'filename': self.orig_image = Image.open(value)
             if key == 'reverse': self.reverse = value
             if key == 'intensity': self.intensity_bar = value
-        if not self.reverse:
+        if self.reverse:
             self.intensity_bar = self.intensity_bar[::-1]
         else:
             self.intensity_bar = self.intensity_bar

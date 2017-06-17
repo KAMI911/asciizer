@@ -24,17 +24,37 @@ def temp_file_path(filename):
 
 
 class TestCalculations(unittest.TestCase):
-    def test_image_pixel_ratio_original(self):
+    def test_image_pixel_ratio_original_value(self):
         self.t = asciizer.asciizer(filename=input_file_path('Tux.png'))
         self.assertEqual(self.t.image_ratio, 2)
 
-    def test_image_pixel_ratio_medium(self):
+    def test_image_pixel_ratio_medium_value(self):
         self.t = asciizer.asciizer(filename=input_file_path('Tux.png'), max_width=40)
         self.assertEqual(self.t.image_ratio, 6)
 
-    def test_image_pixel_ratio_small(self):
+    def test_image_pixel_ratio_small_value(self):
         self.t = asciizer.asciizer(filename=input_file_path('Tux.png'), max_width=10)
         self.assertEqual(self.t.image_ratio, 26)
+
+    def test_image_load_intensity_bar(self):
+        self.t = asciizer.asciizer(filename=input_file_path('Tux.png'))
+        self.assertEqual(self.t.intensity_bar, ' .:-=+*#%@')
+
+    def test_image_load_intensity_bar_reverse(self):
+        self.t = asciizer.asciizer(filename=input_file_path('Tux.png'), reverse=True)
+        self.assertEqual(self.t.intensity_bar, '@%#*+=-:. ')
+
+    def test_image_load_intensity_step_value(self):
+        self.t = asciizer.asciizer(filename=input_file_path('Tux.png'))
+        self.assertEqual(self.t.intensity_step, 85)
+
+    def test_image_load_intensity_step_int_value(self):
+        self.t = asciizer.asciizer(filename=input_file_path('Tux.png'))
+        self.assertEqual(self.t.intensity_step_int, 28)
+
+    def test_image_load_custom_intensity_bar(self):
+        self.t = asciizer.asciizer(filename=input_file_path('Tux.png'), intensity='TESZ')
+        self.assertEqual(self.t.intensity_bar, 'TESZ')
 
     def test_image_save_jpg(self):
         self.temp_file = temp_file_path('Tux100.txt')
