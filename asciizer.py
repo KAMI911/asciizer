@@ -1,3 +1,4 @@
+#!/usr/bin/python
 try:
     from PIL import Image
     import argparse, textwrap, os, sys, atexit, logging, logging.config
@@ -6,7 +7,7 @@ except ImportError as err:
     exit(128)
 
 __program__ = 'ASCIIzer'
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 
 DEFAULT_IMAGE_MAX_SIZE = 100
 DEFAULT_INTENSITY_SCALE = " .:-=+*#%@"
