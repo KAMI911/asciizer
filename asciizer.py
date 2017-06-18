@@ -1,11 +1,17 @@
 try:
     from PIL import Image
-    import argparse
-    import textwrap
-    import os
+    import argparse, textwrap, os, sys, atexit, logging, logging.config
 except ImportError as err:
     print('Error {0} import module: {1}'.format(__name__, err))
     exit(128)
+
+__program__ = 'ASCIIzer'
+__version__ = '0.1'
+
+
+def init_log():
+    logging.config.fileConfig('log.conf')
+
 
 DEFAULT_IMAGE_MAX_SIZE = 100
 DEFAULT_INTENSITY_SCALE = " .:-=+*#%@"
@@ -13,8 +19,29 @@ DEFAULT_MAX_INTENSITY = 3 * 255
 DEFAULT_MAX_ONE_CHANNEL_INTENSITY = 255
 
 
+def on_exit():
+    if 'converter' in globals():
+        if converter.is_input_file_opened:
+            logging.info('Closing opened input file.')
+            converter.close()
+    logging.info('Finished, exiting and go home ...')
+
+
+def exception_hook(exc_type, exc_value, exc_traceback):
+    if 'converter' in globals():
+        if converter.is_input_file_opened:
+            converter.close()
+    logging.fatal("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback))
+    exit(-1)
+
+
+sys.excepthook = exception_hook
+atexit.register(on_exit)
+
+
 class asciizer:
     def __init__(self, **kwargs):
+        self.input_file_opened = False
         self.max_width = DEFAULT_IMAGE_MAX_SIZE
         self.reverse = False
         self.intensity_bar = DEFAULT_INTENSITY_SCALE
@@ -27,11 +54,15 @@ class asciizer:
             self.intensity_bar = self.intensity_bar[::-1]
         else:
             self.intensity_bar = self.intensity_bar
+        if self.orig_image is None:
+            raise IOerror('Unable load ({0}) input image!'.format(cmd.input))
+        else:
+            self.input_file_opened = True
         self.orig_img = self.orig_image.load()
         self.image_size = self.orig_image.size
         self.__calculate_pixel_ration()
         self.intensity_step = int(DEFAULT_MAX_INTENSITY / (len(self.intensity_bar) - 1))
-        self.intensity_step_int = int(DEFAULT_MAX_ONE_CHANNEL_INTENSITY / (len(self.intensity_bar) - 1))
+        self.intensity_one_channel_step = int(DEFAULT_MAX_ONE_CHANNEL_INTENSITY / (len(self.intensity_bar) - 1))
 
     def __calculate_pixel_ration(self):
         self.image_ratio = int(self.orig_image.width / self.max_width)
@@ -47,7 +78,7 @@ class asciizer:
                 if not isinstance(pixel, int):
                     image_str += self.__intensity_calculator(pixel, self.intensity_step)
                 else:
-                    image_str += self.intensity_bar[int((255 - pixel) / self.intensity_step_int)]
+                    image_str += self.intensity_bar[int((255 - pixel) / self.intensity_one_channel_step)]
             image_str += "\n"
         return image_str
 
@@ -55,11 +86,19 @@ class asciizer:
         print(self.process())
 
     def save(self, filename):
-        with open(filename, "w") as f:
-            f.write(self.process())
+        try:
+            with open(filename, "w") as f:
+                f.write(self.process())
+        except Exception as e:
+            raise IOError('Unable save text file! {0} Error: {1}'.format(cmd.output, e))
 
     def close(self):
         self.orig_image.close()
+        self.input_file_opened = False
+
+    @property
+    def is_input_file_opened(self):
+        return self.input_file_opened
 
 
 class asciizer_commandline:
@@ -105,25 +144,26 @@ class asciizer_commandline:
 
 
 if __name__ == "__main__":
-    cmd = asciizer_commandline()
-    cmd.parse()
-    if os.path.isfile(cmd.input):
-        try:
-            ascii = asciizer(filename=cmd.input, max_width=cmd.width, intensity=DEFAULT_INTENSITY_SCALE,
-                             reverse=cmd.reverse)
-        except:
-            print('Unable load ({0}) image!'.format(cmd.input))
-            exit(1)
-        ascii.draw()
-    else:
-        print('File is not exist! ({0})'.format(cmd.input))
-        exit(1)
-    if cmd.output is not None:
-        try:
-            ascii.save(cmd.output)
-        except:
-            print('Unable save text file! {0}'.format(cmd.output))
-        finally:
-            ascii.close()
-    else:
-        ascii.close()
+    try:
+        init_log()
+        logging.info('Starting {0} ...'.format(__program__))
+        logging.info('Reading command line parameters ...'.format(__program__))
+        cmd = asciizer_commandline()
+        logging.info('Parsing command line parameters ...'.format(__program__))
+        cmd.parse()
+        if os.path.isfile(cmd.input):
+            logging.info('Processing image ...'.format(__program__))
+            converter = asciizer(filename=cmd.input, max_width=cmd.width, intensity=DEFAULT_INTENSITY_SCALE,
+                                 reverse=cmd.reverse)
+            converter.draw()
+        else:
+            raise IOError('Input file is not exist! ({0})'.format(cmd.input))
+        if cmd.output is not None:
+            logging.info('Saving image to {0} text file ...'.format(cmd.output))
+            converter.save(cmd.output)
+    except KeyboardInterrupt as e:
+        logging.fatal('Processing is interrupted by the user.')
+    except IOError as e:
+        logging.error('File error: {0}'.format(e))
+    except Exception as e:
+        logging.error(e, exc_info=True)

@@ -36,6 +36,7 @@ class TestCalculations(unittest.TestCase):
         self.t = asciizer.asciizer(filename=input_file_path('Tux.png'), max_width=10)
         self.assertEqual(self.t.image_ratio, 26)
 
+
 class TestIntensityBar(unittest.TestCase):
     def test_image_load_intensity_bar(self):
         self.t = asciizer.asciizer(filename=input_file_path('Tux.png'))
@@ -51,11 +52,12 @@ class TestIntensityBar(unittest.TestCase):
 
     def test_image_load_intensity_step_int_value(self):
         self.t = asciizer.asciizer(filename=input_file_path('Tux.png'))
-        self.assertEqual(self.t.intensity_step_int, 28)
+        self.assertEqual(self.t.intensity_one_channel_step, 28)
 
     def test_image_load_custom_intensity_bar(self):
         self.t = asciizer.asciizer(filename=input_file_path('Tux.png'), intensity='TESZ')
         self.assertEqual(self.t.intensity_bar, 'TESZ')
+
 
 class TestSaveImage(unittest.TestCase):
     def test_image_save_jpg(self):
