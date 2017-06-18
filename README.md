@@ -8,8 +8,6 @@ usage: asciizer [-h] -i INPUT [-o OUTPUT] [-w WIDTH] [-r]
 
 optional arguments:
 
-optional arguments:
-
   -h, --help
 
     show this help message and exit
@@ -34,6 +32,12 @@ optional arguments:
 
     optional:  show image when file is saved
 
-example:
+## Example of ASCIIzer usage
 
-  asciizer.py -i happy.jpg
+Open happy.jpg picture and display the ASCII art
+
+    asciizer.py -i happy.jpg
+
+Open happy.jpg picture and save the ASCII art as happy.txt
+
+    asciizer.py -i happy.jpg -o happy.txt
