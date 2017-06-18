@@ -110,20 +110,20 @@ class asciizer_commandline:
         example:
           asciizer.py -i happy.jpg  '''))
 
-        self.parser.add_argument('-i', type=str, dest='input', required=True,
+        self.parser.add_argument('-i', '--input', type=str, dest='input', required=True,
                                  help='required:  input file (with or witout path)')
 
-        self.parser.add_argument('-o', type=str, dest='output', required=False,
+        self.parser.add_argument('-o', '--output', type=str, dest='output', required=False,
                                  help='optional:  output file (with or witout path)')
 
-        self.parser.add_argument('-w', type=int, dest='width', required=False,
+        self.parser.add_argument('-w', '--width', type=int, dest='width', required=False,
                                  help='optional:  ASCII with (in characters) [default: {0}]'.format(
                                      DEFAULT_IMAGE_MAX_SIZE))
 
-        self.parser.add_argument('-r', dest='reverse', required=False,
+        self.parser.add_argument('-r', '--reverse', dest='reverse', required=False,
                                  help='optional:  Use reverse intensity bar', action='store_true')
 
-        self.parser.add_argument('-s', dest='show', required=False,
+        self.parser.add_argument('-s', '--show', dest='show', required=False,
                                  help='optional:  show image when file is saved', action='store_true')
 
     def parse(self):
