@@ -50,7 +50,7 @@ class TestIntensityBar(unittest.TestCase):
         self.t = asciizer.asciizer(filename=input_file_path('Tux.png'))
         self.assertEqual(self.t.intensity_step, 85)
 
-    def test_image_load_intensity_step_int_value(self):
+    def test_image_load_intensity_one_channel_step_value(self):
         self.t = asciizer.asciizer(filename=input_file_path('Tux.png'))
         self.assertEqual(self.t.intensity_one_channel_step, 28)
 

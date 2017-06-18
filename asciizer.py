@@ -6,7 +6,7 @@ except ImportError as err:
     exit(128)
 
 __program__ = 'ASCIIzer'
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 
 DEFAULT_IMAGE_MAX_SIZE = 100
 DEFAULT_INTENSITY_SCALE = " .:-=+*#%@"
