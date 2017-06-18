@@ -6,17 +6,16 @@ except ImportError as err:
     exit(128)
 
 __program__ = 'ASCIIzer'
-__version__ = '0.1'
-
-
-def init_log():
-    logging.config.fileConfig('log.conf')
-
+__version__ = '0.1.2'
 
 DEFAULT_IMAGE_MAX_SIZE = 100
 DEFAULT_INTENSITY_SCALE = " .:-=+*#%@"
 DEFAULT_MAX_INTENSITY = 3 * 255
 DEFAULT_MAX_ONE_CHANNEL_INTENSITY = 255
+
+
+def init_log():
+    logging.config.fileConfig('log.conf')
 
 
 def on_exit():
