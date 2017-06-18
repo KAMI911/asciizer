@@ -123,6 +123,9 @@ class asciizer_commandline:
         self.parser.add_argument('-r', dest='reverse', required=False,
                                  help='optional:  Use reverse intensity bar', action='store_true')
 
+        self.parser.add_argument('-s', dest='show', required=False,
+                                 help='optional:  show image when file is saved', action='store_true')
+
     def parse(self):
         self.args = self.parser.parse_args()
 
@@ -142,6 +145,10 @@ class asciizer_commandline:
     def reverse(self):
         return self.args.reverse
 
+    @property
+    def show(self):
+        return self.args.show
+
 
 if __name__ == "__main__":
     try:
@@ -155,9 +162,10 @@ if __name__ == "__main__":
             logging.info('Processing image ...'.format(__program__))
             converter = asciizer(filename=cmd.input, max_width=cmd.width, intensity=DEFAULT_INTENSITY_SCALE,
                                  reverse=cmd.reverse)
-            converter.draw()
         else:
             raise IOError('Input file is not exist! ({0})'.format(cmd.input))
+        if cmd.show == True or cmd.output is None:
+            converter.draw()
         if cmd.output is not None:
             logging.info('Saving image to {0} text file ...'.format(cmd.output))
             converter.save(cmd.output)
