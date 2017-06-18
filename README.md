@@ -32,7 +32,7 @@ optional arguments:
 
     optional:  show image when file is saved
 
-## Example of ASCIIzer usage
+### Example of ASCIIzer usage
 
 Open happy.jpg picture and display the ASCII art
 
