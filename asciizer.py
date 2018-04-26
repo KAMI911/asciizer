@@ -154,12 +154,12 @@ if __name__ == "__main__":
     try:
         init_log()
         logging.info('Starting {0} ...'.format(__program__))
-        logging.info('Reading command line parameters ...'.format(__program__))
+        logging.info('Reading command line parameters ...')
         cmd = asciizer_commandline()
-        logging.info('Parsing command line parameters ...'.format(__program__))
+        logging.info('Parsing command line parameters ...')
         cmd.parse()
         if os.path.isfile(cmd.input):
-            logging.info('Processing image ...'.format(__program__))
+            logging.info('Processing image ...')
             converter = asciizer(filename=cmd.input, max_width=cmd.width, intensity=DEFAULT_INTENSITY_SCALE,
                                  reverse=cmd.reverse)
         else:
