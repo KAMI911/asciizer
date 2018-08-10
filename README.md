@@ -1,5 +1,7 @@
 # ASCIIzer - Make beautiful ASCII arts from images 
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/919cc7fae9f149dda4405d955517665f)](https://www.codacy.com/project/KAMI911/asciizer/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=KAMI911/asciizer&amp;utm_campaign=Badge_Grade_Dashboard)[![Maintainability](https://api.codeclimate.com/v1/badges/11940f5ee97d6720b091/maintainability)](https://codeclimate.com/github/KAMI911/asciizer/maintainability)
+
 This program creates ASCII art from your image. You can show the ASCII art or save it directly to file. Also you can specify the character width of the picture.
 
 ## Usage of ASCIIzer
